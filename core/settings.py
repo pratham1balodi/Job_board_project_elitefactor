@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c3wp-9mtqc=0j#kufy%ei(t3k20l=n)zu9b-ex_%4&d+qk=$is'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -136,3 +137,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Ensure this is at the bottom of settings.py
 AUTH_USER_MODEL = 'users.User'
+
+# File: settings.py (Add to the bottom)
+
+# Required for WhiteNoise to compress and cache static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# The URL users visit to get static assets (e.g., /static/styles.css)
+STATIC_URL = '/static/'
+
+# The directory where Djangos 'collectstatic' command will move all static files
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
