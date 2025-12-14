@@ -28,7 +28,7 @@ You must have Python 3.x and pip installed.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [YOUR GITHUB LINK HERE]
+    git clone [https://github.com/pratham1balodi/Job_board_project_elitefactor.git]
     cd job_board_project_final
     ```
 
