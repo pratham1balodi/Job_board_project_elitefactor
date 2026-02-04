@@ -100,7 +100,7 @@ Access the site at `http://127.0.0.1:8000`.
 ```
 
 ---
-Once this is on GitHub, your documentation score should be a perfect 10/10!
 
 ```
+
 
