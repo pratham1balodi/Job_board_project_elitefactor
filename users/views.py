@@ -1,19 +1,15 @@
-# File: job_board_project_final/users/forms.py
+# File: job_board_project_final/users/urls.py
 
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from .views import SignUpView, ProfileView  # Use the names from your views.py
 
-class UserRegistrationForm(UserCreationForm):
-    """Form for creating a new user with a specific role."""
-    
-    class Meta(UserCreationForm.Meta):
-        model = User
-        # Ensure 'role' is included so users can choose Seeker or Employer
-        fields = UserCreationForm.Meta.fields + ('role', 'first_name', 'last_name', 'email')
+urlpatterns = [
+    # Registration & Profile
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('profile/', ProfileView.as_view(), name='profile'),
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Adding Bootstrap classes for better UI
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+    # Authentication (Standard Django Views)
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='homepage'), name='logout'),
+]
