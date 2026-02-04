@@ -2,8 +2,19 @@ from django.db import models
 from django.conf import settings
 
 class JobPost(models.Model):
+    # Choices for the category dropdown
+    CATEGORY_CHOICES = (
+        ('tech', 'Technology'),
+        ('health', 'Healthcare'),
+        ('biz', 'Business'),
+        ('edu', 'Education'),
+        ('other', 'Other'),
+    )
+
     employer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    # ADDED THIS FIELD TO FIX YOUR ERROR
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='other')
     description = models.TextField()
     location = models.CharField(max_length=100)
     salary_range = models.CharField(max_length=100, blank=True)
