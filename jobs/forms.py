@@ -4,7 +4,7 @@ from .models import JobPost
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        # Remove 'salary_range' from this list and add the two new ones:
+        # MUST MATCH THE MODEL: No 'salary_range' here!
         fields = ['title', 'category', 'description', 'location', 'salary_min', 'salary_max', 'is_active']
         
         widgets = {
