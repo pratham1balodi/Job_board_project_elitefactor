@@ -7,11 +7,12 @@ from django.contrib import messages
 from .forms import UserRegistrationForm
 from .models import User
 
-class SignUpView(CreateView):
-    """Main Registration View."""
+class JobSeekerSignUpView(CreateView):
+    """Registration View using your existing seeker_signup.html template."""
     model = User
     form_class = UserRegistrationForm
-    template_name = 'users/signup.html'
+    # FIX: Pointing specifically to the file you have on GitHub
+    template_name = 'users/seeker_signup.html' 
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
@@ -19,8 +20,8 @@ class SignUpView(CreateView):
         messages.success(self.request, f"Account created for {user.username}!")
         return super().form_valid(form)
 
-# Alias to fix the ImportError you saw
-JobSeekerSignUpView = SignUpView 
+# Alias to ensure other parts of the app don't crash
+SignUpView = JobSeekerSignUpView 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     """User Profile View."""
