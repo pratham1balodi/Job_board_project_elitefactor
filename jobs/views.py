@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from .models import JobPost, Application
 from users.models import User
+from .forms import JobPostForm
 
-# --- 1. Public Homepage ---
+# --- Homepage ---
 class HomepageView(TemplateView):
     template_name = 'homepage.html'
     def get_context_data(self, **kwargs):
@@ -19,7 +20,7 @@ class HomepageView(TemplateView):
             context['total_employers'] = 0
         return context
 
-# --- 2. Job Listing & Detail ---
+# --- Job List & Detail ---
 class JobListView(ListView):
     model = JobPost
     template_name = 'jobs/job_list.html'
@@ -31,27 +32,46 @@ class JobDetailView(DetailView):
     model = JobPost
     template_name = 'jobs/job_detail.html'
 
-# --- 3. SEEKER DASHBOARD (This fixes your AttributeError) ---
+# --- SEEKER ACTIONS (This fixes your AttributeError) ---
+
+def apply_to_job(request, pk):
+    """Handles the application logic when a user clicks 'Apply'."""
+    if not request.user.is_authenticated:
+        return redirect('login')
+        
+    job = get_object_or_404(JobPost, pk=pk)
+    
+    # Ensure only Job Seekers (Role 1) can apply
+    if request.user.role != 1:
+        messages.error(request, "Only job seekers can apply for jobs.")
+        return redirect('job_detail', pk=pk)
+
+    # Prevent double applications
+    already_applied = Application.objects.filter(job=job, applicant=request.user).exists()
+    if already_applied:
+        messages.info(request, "You have already applied for this position.")
+    else:
+        Application.objects.create(job=job, applicant=request.user)
+        messages.success(request, "Application submitted successfully!")
+        
+    return redirect('seeker_dashboard')
+
 class SeekerDashboardView(LoginRequiredMixin, ListView):
     model = Application
     template_name = 'jobs/seeker_dashboard.html'
     context_object_name = 'applications'
-
     def get_queryset(self):
-        # Shows jobs this specific user applied for
         return Application.objects.filter(applicant=self.request.user).order_by('-applied_at')
 
-# --- 4. EMPLOYER DASHBOARD ---
+# --- EMPLOYER ACTIONS ---
+
 class EmployerDashboardView(LoginRequiredMixin, ListView):
     model = JobPost
     template_name = 'jobs/employer_dashboard.html'
     context_object_name = 'jobs'
-
     def get_queryset(self):
         return JobPost.objects.filter(employer=self.request.user).order_by('-created_at')
 
-# --- 5. Job Creation (Employer only) ---
-from .forms import JobPostForm
 class JobCreateView(LoginRequiredMixin, CreateView):
     model = JobPost
     form_class = JobPostForm
