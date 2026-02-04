@@ -2,41 +2,35 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.views.generic import CreateView, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from .forms import JobSeekerCreationForm, EmployerCreationForm 
+from django.contrib import messages
+
+# Local imports from your users app
+from .forms import UserRegistrationForm
 from .models import User
 
-# --- 1. Job Seeker Sign Up View ---
-class JobSeekerSignUpView(CreateView):
-    """Handles registration for users with the Job Seeker role."""
+class SignUpView(CreateView):
+    """Handles new user registration with role selection."""
     model = User
-    form_class = JobSeekerCreationForm
-    template_name = 'users/seeker_signup.html'
-    
-    # Redirect to the job list after successful registration and login
-    success_url = reverse_lazy('job_list') 
+    form_class = UserRegistrationForm
+    # Path updated to point to your 'users' subfolder
+    template_name = 'users/signup.html' 
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        # Calls the form's save method, which sets the role (IS_JOB_SEEKER)
-        valid = super().form_valid(form)
-        # Log the user in immediately after successful registration
-        login(self.request, self.object)
-        return valid
+        user = form.save()
+        messages.success(self.request, f"Account created for {user.username}! You can now log in.")
+        return super().form_valid(form)
 
-# --- 2. Employer Sign Up View ---
-class EmployerSignUpView(CreateView):
-    """Handles registration for users with the Employer role."""
-    model = User
-    form_class = EmployerCreationForm 
-    template_name = 'users/employer_signup.html'
-    
-    # Redirect to the job list after successful registration and login
-    success_url = reverse_lazy('job_list') 
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """Displays user profile and redirects to appropriate dashboard."""
+    # Path updated to point to your 'users' subfolder
+    template_name = 'users/profile.html'
 
-    def form_valid(self, form):
-        # Calls the form's save method, which sets the role (IS_EMPLOYER) and company name
-        valid = super().form_valid(form)
-        # Log the user in immediately after successful registration
-        login(self.request, self.object)
-        return valid
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the user object to the template
+        context['user'] = self.request.user
+        return context
