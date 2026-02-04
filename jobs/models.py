@@ -16,7 +16,7 @@ class JobPost(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=100)
     
-    # We are using these two fields now:
+    # We use these two fields
     salary_min = models.PositiveIntegerField(default=0)
     salary_max = models.PositiveIntegerField(default=0)
     
