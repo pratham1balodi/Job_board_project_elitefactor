@@ -13,5 +13,4 @@ urlpatterns = [
     # Employer
     path('employer/dashboard/', views.EmployerDashboardView.as_view(), name='employer_dashboard'),
     path('employer/job/create/', views.JobCreateView.as_view(), name='job_create'),
-    path('employer/job/<int:pk>/toggle/', views.toggle_job_status, name='toggle_job'),
 ]
