@@ -1,16 +1,14 @@
 # File: job_board_project_final/users/urls.py
-
 from django.urls import path
-from .views import JobSeekerSignUpView, EmployerSignUpView
-# Make sure both views are correctly imported
+from django.contrib.auth import views as auth_views
+from .views import JobSeekerSignUpView, ProfileView
 
 urlpatterns = [
-    # Job Seeker Registration (Accessed via /accounts/signup/seeker/)
-    path('signup/seeker/', JobSeekerSignUpView.as_view(), name='seeker_signup'),
+    # Using your specific seeker signup path
+    path('signup/', JobSeekerSignUpView.as_view(), name='signup'),
+    path('profile/', ProfileView.as_view(), name='profile'),
     
-    # Employer Registration (Accessed via /accounts/signup/employer/)
-    path('signup/employer/', EmployerSignUpView.as_view(), name='employer_signup'),
-    
-    # Note: Login/Logout paths are handled automatically by the 'django.contrib.auth.urls' 
-    # included in your core/urls.py.
+    # Standard Authentication
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='homepage'), name='logout'),
 ]
