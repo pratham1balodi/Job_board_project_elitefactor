@@ -1,11 +1,3 @@
-Here is a complete, professional **README.md** designed to get you full marks for documentation. It highlights your custom Role-Based Access Control (RBAC) and the features you've built.
-
-### How to use this:
-
-1. Go to your GitHub repository.
-2. Open the **README.md** file (or create one if it doesn't exist).
-3. Click the Pencil icon to edit.
-4. Delete everything inside and paste the code below.
 
 ---
 
@@ -15,7 +7,7 @@ Here is a complete, professional **README.md** designed to get you full marks fo
 A full-stack Job Board platform built with **Python (Django)** and **Bootstrap**. This application features a robust custom User model with Role-Based Access Control (RBAC), providing unique experiences for Job Seekers and Employers.
 
 ## 🚀 Live Demo
-**View the live project here:** [INSERT_YOUR_RENDER_LINK_HERE]
+**View the live project here:** 
 
 ---
 
@@ -108,10 +100,7 @@ Access the site at `http://127.0.0.1:8000`.
 ```
 
 ---
-
-### Final Submission Reminder:
-Before you submit your assignment, make sure to replace **`[INSERT_YOUR_RENDER_LINK_HERE]`** in the README with the actual link to your website. 
-
 Once this is on GitHub, your documentation score should be a perfect 10/10!
 
 ```
+
